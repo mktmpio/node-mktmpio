@@ -37,13 +37,14 @@ mktmpio.create(instanceType, function(err, res) {
 });
 
 function spawnSubShell(cmd, instance, callback) {
-  var env = _(instance).pick(['username', 'password', 'host', 'port'])
-                       .mapKeys(instance, function(v, key) {
+  var env = _.pick(instance, ['username', 'password', 'host', 'port']);
+  env = _.mapKeys(env, function(v, key) {
     return makeEnv(instance.type, key);
   });
   if (cmd.env) {
     _.assign(env, cmd.env);
   }
+  debug('spawning shell with env:', env);
   if (cmd.cmd) {
     cmd = cmd.cmd;
   }
@@ -52,8 +53,8 @@ function spawnSubShell(cmd, instance, callback) {
     env: _.defaults(env, process.env),
     stdio: 'inherit',
   };
+  debug('spawning subshell:', cmd);
   setTimeout(function() {
-    debug('spawning subshell:', cmd);
     var child = cp.spawn(_.head(cmd), _.tail(cmd), opts);
     child.on('exit', callback);
     child.on('error', callback);
