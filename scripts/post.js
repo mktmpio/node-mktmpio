@@ -39,8 +39,14 @@ function recordEvent() {
     method: 'POST',
   };
   request(reqOpts)
-    .on('errro', debug ? console.error : _.noop)
+    .on('error', debug ? console.error : _.noop)
     .on('response', debug ? dumpResponse : _.noop)
+    .setTimeout(500, function() {
+      if (debug) {
+        console.log('connection timed out', arguments);
+      }
+      process.exit(0);
+    })
     .end(postData);
 }
 
