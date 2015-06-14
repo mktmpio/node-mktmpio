@@ -14,7 +14,7 @@ try {
   inRepo = false;
 }
 
-if (debug || inRepo) {
+if (!inRepo || debug) {
   recordEvent();
 }
 
