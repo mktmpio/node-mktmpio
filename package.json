@@ -4,7 +4,8 @@
   "description": "CLI and client library for mktmp.io service",
   "main": "index.js",
   "scripts": {
-    "test": "tap test/test-*"
+    "test": "tap --save failed-tests.txt --coverage test/test-*",
+    "posttest": "nyc report --reporter=lcov"
   },
   "repository": {
     "type": "git",
