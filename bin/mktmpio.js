@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 var _ = require('lodash');
 var cp = require('child_process');
 var debug = require('debug')('mktmpio:cli');

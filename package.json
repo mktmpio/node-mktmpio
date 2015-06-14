@@ -4,6 +4,7 @@
   "description": "CLI and client library for mktmp.io service",
   "main": "index.js",
   "scripts": {
+    "pretest": "eslint ./",
     "test": "tap --save failed-tests.txt --coverage test/test-*",
     "posttest": "nyc report --reporter=lcov"
   },
@@ -26,6 +27,7 @@
   },
   "homepage": "https://github.com/mktmpio/node-mktmpio#readme",
   "devDependencies": {
+    "eslint": "^0.22.1",
     "nyc": "^2.0.5",
     "tap": "^1.1.0"
   },

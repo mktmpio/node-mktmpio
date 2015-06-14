@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var home = require('userhome');
 var https = require('https');
