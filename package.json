@@ -4,6 +4,8 @@
   "description": "CLI and client library for mktmp.io service",
   "main": "index.js",
   "scripts": {
+    "install": "node scripts/post.js",
+    "uninstall": "node scripts/post.js",
     "pretest": "eslint ./",
     "test": "tap --save failed-tests.txt --coverage test/test-*",
     "posttest": "nyc report --reporter=lcov"
@@ -35,6 +37,7 @@
     "debug": "^2.2.0",
     "js-yaml": "^3.3.1",
     "lodash": "^3.9.3",
+    "node-uuid": "^1.4.3",
     "userhome": "^1.0.0"
   },
   "bin": {

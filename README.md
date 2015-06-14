@@ -1,14 +1,23 @@
 # mktmpio
 
-Node client and CLI for https://mktmp.io/ service.
+CLI and Node client for https://mktmp.io/ service.
+
+## Installation
+
+**NOTE:** This package is open source, but installation from npmjs.com is
+subject to the [mktmpio Privacy Policy](https://mktmp.io/privacy-policy).
+
+    $ npm install -g mktmpio
+    $ echo 'token: $MY_TOKEN' > ~/.mktmpio.yml
 
 ## Usage
 
-```
-$ npm install -g mktmpio
-$ echo 'token: $MY_TOKEN' > ~/.mktmpio.yml
-$ mktmpio $TYPE
-```
+Once installed and your `~/.mktmpio.yml` config contains your mktmpio auth
+token you can create an instance of any of the supported services:
+
+    $ mktmpio $TYPE
+
+### Examples
 
 #### Redis
 
@@ -26,19 +35,6 @@ $
 
 ```
 $ mktmpio mysql
-Warning: Using a password on the command line interface can be insecure.
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 2
-Server version: 5.6.25 MySQL Community Server (GPL)
-
-Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
 mysql> select 1, 2;
 +---+---+
 | 1 | 2 |
@@ -52,3 +48,12 @@ Bye
 instance 3b9f136893da terminated
 $
 ```
+
+## Legal
+
+&copy; 2015, Datajin Technologies, Inc.
+
+This package is open source under an Artistic 2.0 license, but installation
+of this module and use of the mktmpio service are both subject to the
+[mktmpio Privacy Policy](https://mktmp.io/privacy-policy) and
+[mktmpio Terms of Service policy](https://mktmp.io/terms-of-service).
