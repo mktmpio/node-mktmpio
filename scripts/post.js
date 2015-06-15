@@ -38,16 +38,16 @@ function recordEvent() {
     path: debug ? '/debug/collect' : '/collect',
     method: 'POST',
   };
-  request(reqOpts)
-    .on('error', debug ? console.error : _.noop)
-    .on('response', debug ? dumpResponse : _.noop)
-    .setTimeout(500, function() {
-      if (debug) {
-        console.log('connection timed out', arguments);
-      }
-      process.exit(0);
-    })
-    .end(postData);
+  var req = request(reqOpts);
+  req.setTimeout(500, function() {
+    if (debug) {
+      console.log('connection timed out', arguments);
+    }
+    process.exit(0);
+  });
+  req.on('error', debug ? console.error : _.noop)
+     .on('response', debug ? dumpResponse : _.noop)
+     .end(postData);
 }
 
 function dumpResponse(res) {
