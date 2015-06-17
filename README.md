@@ -1,4 +1,4 @@
-# mktmpio
+# mktmpio [![Build Status](https://travis-ci.org/mktmpio/node-mktmpio.svg?branch=master)](https://travis-ci.org/mktmpio/node-mktmpio)
 
 CLI and Node client for https://mktmp.io/ service.
 
