@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var home = require('userhome');
+var http = require('http');
 var https = require('https');
 var url = require('url');
 var WebSocket = require('faye-websocket');
@@ -14,22 +15,28 @@ try {
 } catch (e) {
   conf = {};
 }
-conf.url = process.env.MKTMPIO_URL || conf.url || 'https://mktmp.io/';
+conf.url = url.parse(process.env.MKTMPIO_URL ||
+                     conf.url ||
+                     'https://mktmp.io/api/v1');
 conf.token = process.env.MKTMPIO_TOKEN || conf.token;
+if (!conf.url.port) {
+  conf.url.port = /https/.test(conf.url.protocol) ? 443 : 80;
+}
+var request = /https/.test(conf.url.protocol) ? https.request : http.request;
 
 exports.create = createInstance;
 exports.destroy = destroyInstance;
 exports.attach = attachToInstance;
 
 function createInstance(instanceType, callback) {
-  https.request({
-    hostname: 'mktmp.io',
-    port: 443,
-    path: '/api/v1/new/' + instanceType,
+  request({
+    hostname: conf.url.hostname,
+    port: conf.url.port,
+    path: conf.url.pathname + '/new/' + instanceType,
     method: 'POST',
     headers: {
       'X-Auth-Token': conf.token,
-      'User-Agent': 'mktmpio/' + require('./package.json').version,
+      'User-Agent': 'node-mktmpio/' + require('./package.json').version,
     },
   }, function(res) {
     collectJSON(res, callback);
@@ -37,14 +44,14 @@ function createInstance(instanceType, callback) {
 }
 
 function destroyInstance(instanceId, callback) {
-  https.request({
-    hostname: 'mktmp.io',
-    port: 443,
-    path: '/api/v1/i/' + instanceId,
+  request({
+    hostname: conf.url.hostname,
+    port: conf.url.port,
+    path: conf.url.pathname + '/i/' + instanceId,
     method: 'DELETE',
     headers: {
       'X-Auth-Token': conf.token,
-      'User-Agent': 'mktmpio/' + require('./package.json').version,
+      'User-Agent': 'node-mktmpio/' + require('./package.json').version,
     },
   }, function(res) {
     collectJSON(res, callback);
@@ -68,23 +75,20 @@ function collectJSON(res, callback) {
 }
 
 function attachToInstance(instanceId, callback) {
-  var wsUrl = url.parse(conf.url);
-  wsUrl.protocol = wsUrl.protocol.replace('http', 'ws');
-  if (/mktmp\.io/.test(wsUrl.hostname)) {
-    wsUrl.port = 8443;
-    delete wsUrl.host;
-  }
-  wsUrl.pathname = '/ws';
-  wsUrl.query = {
-    id: instanceId,
-  };
-  wsUrl = url.format(wsUrl);
+  var wsUrl = url.format({
+    protocol: conf.url.protocol.replace('http', 'ws'),
+    hostname: conf.url.hostname,
+    port: conf.url.port === 443 ? 8443 : conf.url.port,
+    pathname: '/ws',
+    query: {id: instanceId},
+  });
   var headers = {
     'X-Auth-Token': conf.token,
-    'User-Agent': 'mktmpio/' + require('./package.json').version,
+    'User-Agent': 'node-mktmpio/' + require('./package.json').version,
   };
   var ws = new WebSocket.Client(wsUrl, [], {headers: headers});
-  ws.on('open', function() {
+  ws.once('open', function() {
     callback(null, ws);
   });
+  ws.once('error', callback);
 }
