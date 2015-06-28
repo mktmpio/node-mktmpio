@@ -6,6 +6,7 @@ var _ = require('lodash');
 var cp = require('child_process');
 var debug = require('debug')('mktmpio:cli');
 var mktmpio = require('../');
+var readline = require('readline');
 
 var args = _.takeWhile(process.argv, _.negate(literalSeparator)).slice(2);
 var subShell = _.drop(process.argv, args.length + 3);
@@ -18,7 +19,21 @@ mktmpio.create(instanceType, function(err, res) {
   }
   var instance = res;
   debug('created instance', instance);
-  if (subShell.length <= 0) {
+  if (subShell.length <= 0 && res.containerShell) {
+    return spawnRemoteShell(instance.id, function(err) {
+      if (err) {
+        console.error('Error spawning remote shell:', err);
+        return;
+      }
+      mktmpio.destroy(res.id, function(err, res) {
+        if (err || res.error) {
+          console.error('error terminating service:', err || res.error);
+        } else {
+          console.log('instance %s terminated', instance.id);
+        }
+      });
+    });
+  } else if (subShell.length <= 0) {
     subShell = res.remoteShell || subShell;
   }
   if (Object.keys(subShell).length > 0) {
@@ -61,6 +76,26 @@ function spawnSubShell(cmd, instance, callback) {
     child.on('exit', callback);
     child.on('error', callback);
   }, 200);
+}
+
+function spawnRemoteShell(id, callback) {
+  mktmpio.attach(id, function(err, ws) {
+    if (err) {
+      return callback(err);
+    }
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(true);
+    }
+    process.stdin.pipe(ws).pipe(process.stdout, {end: false});
+    ws.on('close', function() {
+      // This is a hack to restore the shell prompt after we finish
+      readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      }).close();
+      return callback();
+    });
+  });
 }
 
 function literalSeparator(str) {
