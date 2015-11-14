@@ -8,7 +8,7 @@
     "uninstall": "node scripts/post.js",
     "pretest": "eslint ./",
     "test": "tap --save failed-tests.txt --coverage test/test-*",
-    "posttest": "nyc report --reporter=lcov"
+    "coverage": "tap --coverage-report=lcov"
   },
   "repository": {
     "type": "git",
@@ -30,12 +30,11 @@
   "homepage": "https://github.com/mktmpio/node-mktmpio#readme",
   "devDependencies": {
     "eslint": "^1.1.0",
-    "nyc": "^2.0.5",
-    "tap": "^1.1.0"
+    "tap": "^2.0.0"
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "faye-websocket": "^0.9.4",
+    "faye-websocket": "^0.10.0",
     "js-yaml": "^3.3.1",
     "lodash": "^3.9.3",
     "node-uuid": "^1.4.3",
