@@ -1,10 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
+var crypto = require('crypto');
 var fs = require('fs');
-var request = require('https').request;
 var qs = require('querystring');
-var uuid = require('node-uuid');
+var request = require('https').request;
+var pkg = require('../package.json');
+var nodeUA = 'node/' + process.version;
+var name = process.env.npm_package_name || 'mktmpio';
+var version = process.env.npm_package_version || pkg.version;
+var lifecycle = process.env.npm_lifecycle_event || 'post-install';
+var userAgent = process.env.npm_config_user_agent || nodeUA;
 
 var debug = /test/.test(process.env.NODE_ENV);
 var inRepo = false;
@@ -21,17 +26,17 @@ if (!inRepo || debug) {
 return;
 
 function recordEvent() {
-  var params = _.omit({
+  var params = {
     v: '1',
     tid: 'UA-63367092-1',
     ds: 'npm',
-    cid: uuid.v4(),
-    ua: process.env.npm_config_user_agent,
+    cid: uuid(),
+    ua: userAgent,
     t: 'event',
     ec: 'npm',
-    ea: process.env.npm_lifecycle_event,
-    el: process.env.npm_package_name + '@' + process.env.npm_package_version,
-  }, _.isUndefined);
+    ea: lifecycle,
+    el: name + '@' + version,
+  };
   var postData = qs.stringify(params);
   var reqOpts = {
     host: 'www.google-analytics.com',
@@ -45,12 +50,23 @@ function recordEvent() {
     }
     process.exit(0);
   });
-  req.on('error', debug ? console.error : _.noop)
-     .on('response', debug ? dumpResponse : _.noop)
+  req.on('error', debug ? console.error : noop)
+     .on('response', debug ? dumpResponse : noop)
      .end(postData);
+}
+
+function uuid() {
+  var rnd = crypto.randomBytes(16);
+  rnd[6] = (rnd[6] & 0x0f) | 0x40;
+  rnd[8] = (rnd[8] & 0x3f) | 0x80;
+  rnd = rnd.toString('hex').match(/(.{8})(.{4})(.{4})(.{4})(.{12})/);
+  rnd.shift();
+  return rnd.join('-');
 }
 
 function dumpResponse(res) {
   console.log('RESP:', res.statusCode);
   res.on('data', console.log.bind(console, 'RESP: %s'));
 }
+
+function noop() {}

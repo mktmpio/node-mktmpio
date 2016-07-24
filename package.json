@@ -37,7 +37,6 @@
     "faye-websocket": "^0.10.0",
     "js-yaml": "^3.3.1",
     "lodash": "^3.9.3",
-    "node-uuid": "^1.4.3",
     "userhome": "^1.0.0"
   },
   "bin": {
