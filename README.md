@@ -2,10 +2,13 @@
 
 CLI and Node client for https://mktmp.io/ service.
 
+> **Note:** If you are looking for a more full-featured CLI, you should take a
+> look at [mktmpio/cli](https://github.com/mktmpio/cli).
+
 ## Installation
 
-**NOTE:** This package is open source, but installation from npmjs.com is
-subject to the [mktmpio Privacy Policy](https://mktmp.io/privacy-policy).
+> **NOTE:** This package is open source, but installation from npmjs.com is
+> subject to the [mktmpio Privacy Policy](https://mktmp.io/privacy-policy).
 
     $ npm install -g mktmpio
     $ echo 'token: $MY_TOKEN' > ~/.mktmpio.yml
