@@ -6,7 +6,7 @@
   "scripts": {
     "install": "node scripts/post.js",
     "uninstall": "node scripts/post.js",
-    "pretest": "eslint ./",
+    "pretest": "eslint --ignore-path .gitignore ./",
     "test": "tap --save failed-tests.txt --coverage test/test-*",
     "coverage": "tap --coverage-report=lcov"
   },
