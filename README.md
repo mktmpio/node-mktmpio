@@ -51,7 +51,7 @@ $
 
 ## Legal
 
-&copy; 2015, Datajin Technologies, Inc.
+&copy; 2015,2016 Datajin Technologies, Inc.
 
 This package is open source under an Artistic 2.0 license, but installation
 of this module and use of the mktmpio service are both subject to the

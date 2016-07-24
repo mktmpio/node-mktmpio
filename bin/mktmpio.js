@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+// Copyright Datajin Technologies, Inc. 2015,2016. All Rights Reserved.
+// Node module: mktmpio
+// This file is licensed under the Artistic License 2.0.
+// License text available at https://opensource.org/licenses/Artistic-2.0
 
 'use strict';
 
