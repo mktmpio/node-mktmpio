@@ -29,7 +29,10 @@
   },
   "homepage": "https://github.com/mktmpio/node-mktmpio#readme",
   "devDependencies": {
-    "eslint": "^1.1.0",
+    "eslint": "^2.13.1",
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-promise": "^2.0.0",
+    "eslint-plugin-standard": "^2.0.0",
     "tap": "^6.2.0"
   },
   "dependencies": {
@@ -44,5 +47,22 @@
   },
   "directories": {
     "test": "test"
+  },
+  "eslintConfig": {
+    "extends": "standard",
+    "rules": {
+      "semi": [
+        2,
+        "always"
+      ],
+      "space-before-function-paren": [
+        2,
+        "never"
+      ],
+      "comma-dangle": [
+        2,
+        "always-multiline"
+      ]
+    }
   }
 }

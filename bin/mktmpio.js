@@ -91,7 +91,7 @@ function spawnRemoteShell(id, callback) {
       // This is a hack to restore the shell prompt after we finish
       readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
       }).close();
       return callback();
     });

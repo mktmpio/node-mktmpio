@@ -23,8 +23,6 @@ if (!inRepo || debug) {
   recordEvent();
 }
 
-return;
-
 function recordEvent() {
   var params = {
     v: '1',
