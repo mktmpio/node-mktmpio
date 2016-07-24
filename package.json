@@ -1,6 +1,6 @@
 {
   "name": "mktmpio",
-  "version": "1.0.0-8",
+  "version": "1.0.0-9",
   "description": "CLI and client library for mktmp.io service",
   "main": "index.js",
   "scripts": {
