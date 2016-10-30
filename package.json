@@ -32,7 +32,7 @@
     "eslint": "^2.13.1",
     "eslint-config-standard": "^5.3.5",
     "eslint-plugin-promise": "^2.0.0",
-    "eslint-plugin-standard": "^2.0.0",
+    "eslint-plugin-standard": "^1.0.0",
     "tap": "^8.0.0"
   },
   "dependencies": {
