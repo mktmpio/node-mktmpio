@@ -29,3 +29,47 @@ tap.test('happy path', function(t) {
     });
   });
 });
+
+tap.test('application error', function(t) {
+  mockServer(200, {'Content-Type': 'application/json'}, {error: 'bad stuff'}, function(opts) {
+    var req = {
+      hostname: opts.hostname,
+      port: opts.port,
+      protocol: opts.protocol,
+      path: '/',
+      method: 'POST',
+      headers: {
+        'X-Auth-Token': 'XXXXXXX',
+        'User-Agent': 'node-mktmpio/1.2.3',
+      },
+    };
+    request(req, function(err, res) {
+      t.type(err, Error);
+      t.match(err, {message: 'bad stuff'});
+      t.match(res, {error: 'bad stuff'});
+      t.end();
+    });
+  });
+});
+
+tap.test('parse error', function(t) {
+  mockServer(200, {'Content-Type': 'application/json'}, 'not actually JSON', function(opts) {
+    var req = {
+      hostname: opts.hostname,
+      port: opts.port,
+      protocol: opts.protocol,
+      path: '/',
+      method: 'POST',
+      headers: {
+        'X-Auth-Token': 'XXXXXXX',
+        'User-Agent': 'node-mktmpio/1.2.3',
+      },
+    };
+    request(req, function(err, res) {
+      t.type(err, Error);
+      t.match(err, {name: /SyntaxError/, message: /token/});
+      t.match(res, 'not actually JSON');
+      t.end();
+    });
+  });
+});
