@@ -7,8 +7,7 @@
 
 var fs = require('fs');
 var home = require('userhome');
-var http = require('http');
-var https = require('https');
+var request = require('./lib/request');
 var url = require('url');
 var WebSocket = require('faye-websocket');
 var yaml = require('js-yaml');
@@ -27,7 +26,6 @@ conf.token = process.env.MKTMPIO_TOKEN || conf.token;
 if (!conf.url.port) {
   conf.url.port = /https/.test(conf.url.protocol) ? 443 : 80;
 }
-var request = /https/.test(conf.url.protocol) ? https.request : http.request;
 
 exports.create = createInstance;
 exports.destroy = destroyInstance;
@@ -35,6 +33,7 @@ exports.attach = attachToInstance;
 
 function createInstance(instanceType, callback) {
   request({
+    protocol: conf.url.protocol,
     hostname: conf.url.hostname,
     port: conf.url.port,
     path: conf.url.pathname + '/new/' + instanceType,
@@ -43,13 +42,12 @@ function createInstance(instanceType, callback) {
       'X-Auth-Token': conf.token,
       'User-Agent': 'node-mktmpio/' + require('./package.json').version,
     },
-  }, function(res) {
-    collectJSON(res, callback);
-  }).end();
+  }, callback);
 }
 
 function destroyInstance(instanceId, callback) {
   request({
+    protocol: conf.url.protocol,
     hostname: conf.url.hostname,
     port: conf.url.port,
     path: conf.url.pathname + '/i/' + instanceId,
@@ -58,25 +56,7 @@ function destroyInstance(instanceId, callback) {
       'X-Auth-Token': conf.token,
       'User-Agent': 'node-mktmpio/' + require('./package.json').version,
     },
-  }, function(res) {
-    collectJSON(res, callback);
-  }).end();
-}
-
-function collectJSON(res, callback) {
-  var buf = '';
-  res.on('data', function(d) {
-    buf += d;
-  });
-  res.on('end', function() {
-    var err = null;
-    try {
-      buf = buf.length > 0 ? JSON.parse(buf) : {};
-    } catch (e) {
-      err = e;
-    }
-    callback(err, buf);
-  });
+  }, callback);
 }
 
 function attachToInstance(instanceId, callback) {

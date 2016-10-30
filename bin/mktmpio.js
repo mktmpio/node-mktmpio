@@ -19,6 +19,7 @@ var instanceType = args[0];
 mktmpio.create(instanceType, function(err, res) {
   if (err || res.error) {
     console.error('error creating instance:', err || res.error);
+    debug('response:', res);
     return process.exit(1);
   }
   var instance = res;
