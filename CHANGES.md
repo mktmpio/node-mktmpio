@@ -1,4 +1,18 @@
-2016-07-24, Version 1.0.0-9
+2016-10-31, Version 1.0.0-10
+============================
+
+ * deps: downgrade eslint-plugin-standard (Ryan Graham)
+
+ * deps: upgrade to tap@8 (Ryan Graham)
+
+ * ci: drop node 5, add node 7 (Ryan Graham)
+
+ * fix error missing error propagation (Ryan Graham)
+
+ * refactor: extract request wrapper + tests (Ryan Graham)
+
+
+2016-07-23, Version 1.0.0-9
 ===========================
 
  * doc: point to mktmpio/cli for alternative CLI (Ryan Graham)
