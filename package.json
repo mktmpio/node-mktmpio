@@ -8,7 +8,9 @@
     "uninstall": "node scripts/post.js",
     "pretest": "eslint --ignore-path .gitignore ./",
     "test": "tap --save failed-tests.txt --coverage test/test-*",
-    "coverage": "tap --coverage-report=lcov"
+    "coverage": "tap --coverage-report=lcov",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -40,7 +42,8 @@
     "faye-websocket": "^0.11.0",
     "js-yaml": "^3.3.1",
     "lodash": "^4.13.1",
-    "userhome": "^1.0.0"
+    "userhome": "^1.0.0",
+    "snyk": "^1.316.2"
   },
   "bin": {
     "mktmpio": "bin/mktmpio.js"
@@ -64,5 +67,6 @@
         "always-multiline"
       ]
     }
-  }
+  },
+  "snyk": true
 }
